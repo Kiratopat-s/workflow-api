@@ -36,6 +36,14 @@ export class UsersService {
 
   }
 
+  async findOneByUsername(username: string): Promise<User> {
+    if (!username) {
+      return null
+    }
+    return this.userRepository.findOneBy({ username })
+  }
+
+
   findAll() {
     return this.userRepository.find();
   }
