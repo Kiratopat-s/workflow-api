@@ -45,7 +45,6 @@ export class UsersService {
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {
-    console.log(updateUserDto);
     // if password is provided
     if (updateUserDto.password) {
       // gen salt
