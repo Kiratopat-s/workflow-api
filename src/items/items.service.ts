@@ -46,7 +46,7 @@ export class ItemsService {
    * @returns {Item}
    */
   findOne(id: number) {
-    return this.itemRepository.findOneBy({ id });
+    return this.itemRepository.findOneBy({ id: id });
   }
 
   // /**
