@@ -11,6 +11,10 @@ export class AuthController {
   @Post('login')
   login(@Request() request: { user: LoggedInDto }) {
     const access_token = this.authService.login(request.user)
-    return { access_token };
+    // return { access_token };
+
+    // for testing purposes
+    const userMetedata = request.user;
+    return { access_token, user: userMetedata };
   }
 }
