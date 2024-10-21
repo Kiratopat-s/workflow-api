@@ -6,7 +6,7 @@ export enum Role {
     MANAGER = 'MANAGER'
 }
 
-@Entity()
+@Entity('bg_user')
 export class User {
 
     @PrimaryGeneratedColumn()
@@ -17,9 +17,15 @@ export class User {
     })
     username: string;
 
+    @Column({
+        nullable: true
+    })
+    description: string; // add
+
     @Column()
     password: string;
 
     @Column()
-    role: Role
+    role: Role;
 }
+

@@ -1,7 +1,7 @@
-import { IsEnum, IsNotEmpty, IsString } from "class-validator";
-import { Role, User } from "../entities/user.entity";
+import { IsEnum, IsNotEmpty, IsOptional, IsString } from "class-validator";
+import { Role } from "../entities/user.entity";
 
-export class CreateUserDto implements Partial<User> {
+export class CreateUserDto {
     @IsString()
     @IsNotEmpty()
     username: string;
@@ -12,4 +12,8 @@ export class CreateUserDto implements Partial<User> {
 
     @IsEnum(Role)
     role: Role;
+
+    @IsString()
+    @IsOptional()
+    description: string;
 }
