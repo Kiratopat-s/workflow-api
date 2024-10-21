@@ -2,10 +2,11 @@ import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 export enum Role {
     USER = 'USER',
-    ADMIN = 'ADMIN'
+    ADMIN = 'ADMIN',
+    MANAGER = 'MANAGER'
 }
 
-@Entity('bg_user')
+@Entity()
 export class User {
 
     @PrimaryGeneratedColumn()
