@@ -1,21 +1,23 @@
-import { IsNotEmpty, isNumber, IsNumber, IsOptional, IsString } from "class-validator";
-import { Item } from "../entities/item.entity";
+import { IsNotEmpty, IsNumber, IsOptional, IsString, ValidationArguments } from "class-validator";
 
-export class CreateItemDto implements Partial<Item> {
+const isNumberMesssage = (validationArguments: ValidationArguments): string => {
+    return `${validationArguments.property}: ต้องเป็นตัวเลข`
+}
+
+export class CreateItemDto {
 
     @IsString()
     @IsNotEmpty()
     title: string;
 
-    @IsNumber()
+    @IsNumber({}, { message: (v) => (`${v.property}: ควรเป็นตัวเลข`) })
     @IsNotEmpty()
     amount: number;
 
-    @IsNumber()
+    @IsNumber({}, { message: isNumberMesssage })
     @IsNotEmpty()
     price: number;
 
     @IsOptional()
     contactMobileNo: string;
-
 }
