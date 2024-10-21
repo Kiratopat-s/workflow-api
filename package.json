@@ -1,8 +1,8 @@
 {
-  "name": "devpool-final",
-  "version": "0.0.1",
+  "name": "devpool-final-backend",
+  "version": "1.0.0",
   "description": "",
-  "author": "",
+  "author": "Kiratipat S.",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
