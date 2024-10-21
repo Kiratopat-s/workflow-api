@@ -3,11 +3,15 @@ import { LoggedInDto } from './dto/logged-in.dto';
 import * as bcrypt from 'bcrypt';
 import { UsersService } from 'src/users/users.service';
 import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
 
-  constructor(private usersService: UsersService, private jwtService: JwtService) { }
+  constructor(
+    private usersService: UsersService,
+    private jwtService: JwtService,
+    private configService: ConfigService) { }
 
   async validateUser(username: string, password: string): Promise<LoggedInDto> {
 
@@ -28,9 +32,29 @@ export class AuthService {
     }
   }
 
-  login(loggedDto: LoggedInDto): string {
-    const payload: LoggedInDto = { ...loggedDto, sub: loggedDto.id };
-    return this.jwtService.sign(payload);
+  login(loggedInDto: LoggedInDto) {
+
+    // sign access_token
+    const payload: LoggedInDto = { ...loggedInDto, sub: loggedInDto.id };
+    const access_token = this.jwtService.sign(payload);
+
+    // sign refresh_token
+    const refreshTokenSecret = this.configService.get('REFRESH_JWT_SECRET')
+    const refreshTokenExpiresIn = this.configService.get('REFRESH_JWT_EXPIRES_IN');
+    const refresh_token = this.jwtService.sign(payload, {
+      secret: refreshTokenSecret,
+      expiresIn: refreshTokenExpiresIn
+    })
+
+    // return access_token & refresh_token
+    return { access_token, refresh_token }
+  }
+
+  refreshToken(loggedInDto: LoggedInDto) {
+    // sign new access_token (refresh it!)
+    const payload: LoggedInDto = { ...loggedInDto, sub: loggedInDto.id };
+    const access_token = this.jwtService.sign(payload);
+    return { access_token }
   }
 
 }
