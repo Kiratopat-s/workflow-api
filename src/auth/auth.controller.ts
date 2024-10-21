@@ -2,6 +2,7 @@ import { Controller, Post, Request, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoggedInDto } from './dto/logged-in.dto';
 import { LocalAuthGuard } from './guards/local-auth.guard';
+import { RefreshJwtAuthGuard } from './guards/refresh-jwt-auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -10,11 +11,19 @@ export class AuthController {
   @UseGuards(LocalAuthGuard)
   @Post('login')
   login(@Request() request: { user: LoggedInDto }) {
-    const access_token = this.authService.login(request.user)
+    const tokens = this.authService.login(request.user)
     // return { access_token };
 
     // for testing purposes
     const userMetedata = request.user;
-    return { access_token, user: userMetedata };
+    return { tokens, user: userMetedata };
+  }
+
+  @UseGuards(RefreshJwtAuthGuard)
+  @Post('refresh')
+  refreshToken(@Request() request: { user: LoggedInDto }) {
+    return this.authService.refreshToken(request.user);
   }
 }
+
+
