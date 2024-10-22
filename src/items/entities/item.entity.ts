@@ -29,7 +29,6 @@ export class Item {
 
     @Column({
         nullable: false,
-        default: 1
     })
     owner_id: number;
 
@@ -38,10 +37,13 @@ export class Item {
     owner: User;
 
     @Column({
-        nullable: false,
-        default: 0
+        nullable: true,
     })
     approver_id: number;
+    @ManyToOne(() => User, user => user.approvedItems)
+    @JoinColumn({ name: 'approver_id' })
+    approver: User;
+
 
     @Column({
         nullable: false,

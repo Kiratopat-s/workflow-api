@@ -34,5 +34,8 @@ export class User {
 
     @OneToMany(() => Item, item => item.owner)
     items: Item[];
+
+    @OneToMany(() => Item, item => item.approver)
+    approvedItems: Item[];
 }
 
