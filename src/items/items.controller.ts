@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, ParseArrayPipe, Query, UseGuards, BadRequestException } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, ParseArrayPipe, Query, UseGuards, BadRequestException, Req } from '@nestjs/common';
 import { ItemsService } from './items.service';
 import { CreateItemDto } from './dto/create-item.dto';
 import { UpdateItemDto } from './dto/update-item.dto';
@@ -7,6 +7,27 @@ import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { Role } from 'src/users/entities/user.entity';
 import { MsgParseIntPipe } from 'src/pipes/msg-parse-int.pipe';
+import { ItemStatus } from './entities/item.entity';
+import { Request } from 'express';
+
+// {
+//   id: 2,
+//   username: 'u1002',
+//   description: 'edited',
+//   role: 'USER',
+//   sub: 2,
+//   iat: 1729605742,
+//   exp: 1729609342
+// }
+interface User {
+  id: number;
+  username: string;
+  description: string;
+  role: Role;
+  sub: number;
+  iat: number;
+  exp: number;
+}
 
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('items')
@@ -14,8 +35,17 @@ export class ItemsController {
   constructor(private readonly itemsService: ItemsService) { }
 
   @Post()
-  create(@Body() createItemDto: CreateItemDto) {
-    return this.itemsService.create(createItemDto);
+  create(@Body() createItemDto: CreateItemDto, @Req() request: Request) {
+    const user = request.user as User;
+    console.log(user);
+    const newItem = {
+      ...createItemDto,
+      status: ItemStatus.PENDING,
+      owner_id: user.id,
+      created_at: new Date(),
+      updated_status_at: new Date()
+    };
+    return this.itemsService.create(newItem);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -38,7 +68,6 @@ export class ItemsController {
   remove(@Param('id', new ParseIntPipe({ exceptionFactory: (errer: string) => (new BadRequestException(`id ควรเป็น int`)) })) id: string) {
     return this.itemsService.remove(+id);
   }
-
 
   @Roles([Role.ADMIN, Role.MANAGER])
   @Patch(':id/approve')
