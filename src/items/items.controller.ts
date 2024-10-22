@@ -10,15 +10,6 @@ import { MsgParseIntPipe } from 'src/pipes/msg-parse-int.pipe';
 import { ItemStatus } from './entities/item.entity';
 import { Request } from 'express';
 
-// {
-//   id: 2,
-//   username: 'u1002',
-//   description: 'edited',
-//   role: 'USER',
-//   sub: 2,
-//   iat: 1729605742,
-//   exp: 1729609342
-// }
 interface User {
   id: number;
   username: string;
@@ -37,7 +28,6 @@ export class ItemsController {
   @Post()
   create(@Body() createItemDto: CreateItemDto, @Req() request: Request) {
     const user = request.user as User;
-    console.log(user);
     const newItem = {
       ...createItemDto,
       status: ItemStatus.PENDING,
@@ -65,19 +55,33 @@ export class ItemsController {
   }
 
   @Delete(':id')
-  remove(@Param('id', new ParseIntPipe({ exceptionFactory: (errer: string) => (new BadRequestException(`id ควรเป็น int`)) })) id: string) {
-    return this.itemsService.remove(+id);
+  async remove(@Param('id', new ParseIntPipe({ exceptionFactory: (errer: string) => (new BadRequestException(`id ควรเป็น int`)) })) id: string) {
+    const remove = await this.itemsService.remove(+id);
+    if (remove.affected === 0) {
+      throw new BadRequestException(`id ${id} not found`);
+    }
+    return { "message": `id ${id} deleted` };
   }
 
   @Roles([Role.ADMIN, Role.MANAGER])
   @Patch(':id/approve')
-  approve(@Param('id', ParseIntPipe) id: number) {
-    return this.itemsService.approve(id);
+  approve(
+    @Param('id', ParseIntPipe) id: number,
+    @Req() request: Request
+  ) {
+    const successor = request.user as User;
+    const successor_id = successor.id;
+    return this.itemsService.approve(id, successor_id);
   }
 
   @Roles([Role.ADMIN, Role.MANAGER])
   @Patch(':id/reject')
-  reject(@Param('id', ParseIntPipe) id: number) {
-    return this.itemsService.reject(id);
+  reject(
+    @Param('id', ParseIntPipe) id: number,
+    @Req() request: Request
+  ) {
+    const successor = request.user as User;
+    const successor_id = successor.id;
+    return this.itemsService.reject(id, successor_id);
   }
 }

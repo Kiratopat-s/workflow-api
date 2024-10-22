@@ -32,8 +32,15 @@ export class ItemsService {
    */
   findAll() {
     return this.itemRepository.find({
-      order: {
-        id: 'DESC'
+      relations: ['owner', 'approver'], order: { id: 'DESC' }, select: {
+        owner: {
+          id: true,
+          username: true
+        },
+        approver: {
+          id: true,
+          username: true
+        }
       }
     });
   }
@@ -46,7 +53,20 @@ export class ItemsService {
    * @returns {Item}
    */
   async findOne(id: number): Promise<Item> {
-    const item = await this.itemRepository.findOneBy({ id });
+    const item = await this.itemRepository.findOne({
+      where: { id },
+      relations: ['owner', 'approver'],
+      select: {
+        owner: {
+          id: true,
+          username: true
+        },
+        approver: {
+          id: true,
+          username: true
+        }
+      }
+    });
     if (!item) {
       throw new NotFoundException(`Item with id ${id} not found`);
     }
@@ -105,7 +125,7 @@ export class ItemsService {
    * @param {number} id
    * @returns {Item}
    */
-  async approve(id: number) {
+  async approve(id: number, successor_id: number) {
     // id should not empty
     if (!id) {
       throw new NotFoundException(`id should not empty`)
@@ -122,6 +142,8 @@ export class ItemsService {
     // return await this.itemRepository.save(approveItem)
 
     item.status = ItemStatus.APPROVED
+    item.approver_id = successor_id
+    item.updated_status_at = new Date()
 
     return await this.itemRepository.save(item)
   }
@@ -135,7 +157,7 @@ export class ItemsService {
    * @param {number} id
    * @returns {Item}
    */
-  async reject(id: number) {
+  async reject(id: number, successor_id: number) {
     if (!id) {
       throw new NotFoundException(`id should not empty`)
     }
@@ -143,7 +165,10 @@ export class ItemsService {
     if (!item) {
       throw new NotFoundException(`not found: id={${id}}`)
     }
+
+    item.approver_id = successor_id
     item.status = ItemStatus.REJECTED
+    item.updated_status_at = new Date()
 
     return await this.itemRepository.save(item)
   }
