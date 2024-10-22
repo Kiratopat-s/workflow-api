@@ -9,7 +9,7 @@ async function bootstrap() {
 
   app.useGlobalPipes(new ValidationPipe());
   app.useGlobalFilters(new QueryFailedErrorFilter(httpAdapter))
-
+  app.enableCors();
   await app.listen(process.env.APP_PORT ?? 3000);
 }
 bootstrap();
