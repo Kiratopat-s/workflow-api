@@ -125,4 +125,26 @@ export class ItemsService {
 
     return await this.itemRepository.save(item)
   }
+
+  /**
+   * Reject item by id in database
+   * Or throw NotFoundException if not found id in database
+   * Or id is empty, item is not found in database, item is already approved in database
+   * @author Kiratipat
+   * @date 2024-10-22
+   * @param {number} id
+   * @returns {Item}
+   */
+  async reject(id: number) {
+    if (!id) {
+      throw new NotFoundException(`id should not empty`)
+    }
+    const item = await this.itemRepository.findOneBy({ id })
+    if (!item) {
+      throw new NotFoundException(`not found: id={${id}}`)
+    }
+    item.status = ItemStatus.REJECTED
+
+    return await this.itemRepository.save(item)
+  }
 }
