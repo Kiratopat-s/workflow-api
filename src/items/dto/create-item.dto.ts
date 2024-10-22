@@ -1,5 +1,4 @@
-import { IsNotEmpty, IsNumber, IsOptional, IsString, ValidationArguments } from "class-validator";
-
+import { IsNotEmpty, IsNumber, IsString, IsEnum, IsDate, ValidationArguments } from "class-validator";
 const isNumberMessage = (validationArguments: ValidationArguments): string => {
     return `${validationArguments.property}: ต้องเป็นตัวเลข`;
 }
