@@ -45,9 +45,14 @@ export class ItemsService {
    * @param {number} id
    * @returns {Item}
    */
-  findOne(id: number) {
-    return this.itemRepository.findOneBy({ id: id });
+  async findOne(id: number): Promise<Item> {
+    const item = await this.itemRepository.findOneBy({ id });
+    if (!item) {
+      throw new NotFoundException(`Item with id ${id} not found`);
+    }
+    return item;
   }
+
 
   // /**
   //  * Update item by id in database
