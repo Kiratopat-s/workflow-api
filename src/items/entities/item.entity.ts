@@ -1,33 +1,28 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 export enum ItemStatus {
-    PENDING = 'PENDING', APPROVED = 'APPROVED', REJECTED = 'REJECTED'
+    PENDING = 'PENDING',
+    APPROVED = 'APPROVED',
+    REJECTED = 'REJECTED'
 }
-
 
 @Entity()
 export class Item {
-
     @PrimaryGeneratedColumn()
     id: number;
 
     @Column()
     title: string;
 
-    @Column()
+    @Column('decimal')
     amount: number;
 
-    @Column()
-    price: number;
-
-    @Column({
-        nullable: true
-    })
-    contactMobileNo: string;
+    @Column('int')
+    quantity: number;
 
     @Column({
         nullable: false,
         default: ItemStatus.PENDING
     })
-    status: ItemStatus
+    status: ItemStatus;
 }
