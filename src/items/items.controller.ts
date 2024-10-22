@@ -8,6 +8,7 @@ import { Roles } from 'src/auth/decorators/roles.decorator';
 import { Role } from 'src/users/entities/user.entity';
 import { MsgParseIntPipe } from 'src/pipes/msg-parse-int.pipe';
 
+@UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('items')
 export class ItemsController {
   constructor(private readonly itemsService: ItemsService) { }
@@ -38,7 +39,7 @@ export class ItemsController {
     return this.itemsService.remove(+id);
   }
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
+
   @Roles([Role.ADMIN, Role.MANAGER])
   @Patch(':id/approve')
   approve(@Param('id', ParseIntPipe) id: number) {
