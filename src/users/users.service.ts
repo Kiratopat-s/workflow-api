@@ -6,6 +6,7 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
 
+type UserWithoutPassword = Omit<User, 'password'>;
 
 @Injectable()
 export class UsersService {
@@ -48,12 +49,14 @@ export class UsersService {
     return this.userRepository.find();
   }
 
-  async findOne(id: number): Promise<User> {
+  async findOne(id: number): Promise<UserWithoutPassword> {
     let user = await this.userRepository.findOneBy({ id });
     if (!user) {
       throw new NotFoundException(`User with ID ${id} not found`);
     }
-    return user;
+    // remove password field
+    const { password, ...userWithoutPassword } = user;
+    return userWithoutPassword;
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {
@@ -68,10 +71,21 @@ export class UsersService {
       // replace password with encPassword
       updateUserDto = { ...updateUserDto, password: encPassword };
     }
-    return this.userRepository.update(id, updateUserDto);
+    const result = this.userRepository.update(id, updateUserDto);
+
+    if ((await result).affected === 0) {
+      throw new NotFoundException(`User with ID ${id} not found`);
+    }
+
+    return this.findOne(id);
   }
 
-  remove(id: number) {
-    return this.userRepository.delete(id);
+  async remove(id: number) {
+
+    const result = this.userRepository.delete(id);
+    if ((await result).affected === 0) {
+      throw new NotFoundException(`User with ID ${id} not found`);
+    }
+    return `User with ID ${id} deleted`;
   }
 }
