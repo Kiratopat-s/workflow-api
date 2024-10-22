@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, ParseEnumPipe, BadRequestException, ParseIntPipe } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -16,6 +16,18 @@ export class UsersController {
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
   }
+
+  @Patch(':id/upgrade-role/:role')
+  upgradeRole(
+    @Param('id', new ParseIntPipe({ exceptionFactory: (error: string) => new BadRequestException(`id ควรเป็น int`) })) id: number,
+    @Param('role', new ParseEnumPipe(Role)) role: Role
+  ) {
+    console.log('Reached upgradeRole method');
+    console.log('ID:', id);
+    console.log('Role:', role);
+    return this.usersService.upgradeRole(id, role);
+  }
+
 
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles([Role.ADMIN, Role.MANAGER])
