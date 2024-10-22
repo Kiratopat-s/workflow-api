@@ -1,7 +1,7 @@
 {
-  "name": "devpool-final-backend",
+  "name": "workflow-api",
   "version": "1.0.0",
-  "description": "",
+  "description": "devpool-final-backend",
   "author": "Kiratipat S.",
   "private": true,
   "license": "UNLICENSED",
