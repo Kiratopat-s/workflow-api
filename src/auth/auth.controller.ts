@@ -3,7 +3,7 @@ import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { LoggedInDto } from './dto/logged-in.dto';
 import { RefreshJwtAuthGuard } from './guards/refresh-jwt-auth.guard';
-import { PerfLoggerInterceptor } from 'src/interceptors/perf-logger.interceptor';
+import { PerfLoggerInterceptor } from '../interceptors/perf-logger.interceptor';
 import { Oauth2AuthGuard } from './guards/oauth2-auth.guard';
 
 @UseInterceptors(PerfLoggerInterceptor)
