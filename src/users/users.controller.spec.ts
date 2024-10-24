@@ -11,7 +11,7 @@ describe('UsersController', () => {
     let service: UsersService;
 
     const userId = '1';
-    const result = {
+    const mockUser = {
         id: 1,
         username: 'test',
         password: 'test',
@@ -55,41 +55,41 @@ describe('UsersController', () => {
                 description: ''
             };
 
-            jest.spyOn(service, 'create').mockResolvedValue(result);
+            jest.spyOn(service, 'create').mockResolvedValue(mockUser);
 
-            expect(await controller.create(createUserDto)).toBe(result);
+            expect(await controller.create(createUserDto)).toBe(mockUser);
         });
     });
 
     describe('findAll', () => {
         it('should return an array of users', async () => {
-            const resultArray = [result];
-            jest.spyOn(service, 'findAll').mockResolvedValue(resultArray);
+            const mockUsers = [mockUser];
+            jest.spyOn(service, 'findAll').mockResolvedValue(mockUsers);
 
-            expect(await controller.findAll()).toBe(resultArray);
+            expect(await controller.findAll()).toBe(mockUsers);
         });
     });
 
     describe('findOne', () => {
         it('should return a single user', async () => {
-            jest.spyOn(service, 'findOne').mockResolvedValue(result);
+            jest.spyOn(service, 'findOne').mockResolvedValue(mockUser);
 
-            expect(await controller.findOne(userId)).toBe(result);
+            expect(await controller.findOne(userId)).toBe(mockUser);
         });
     });
 
     describe('update', () => {
         it('should update a user', async () => {
             const updateUserDto: UpdateUserDto = { username: 'test2' };
-            jest.spyOn(service, 'update').mockResolvedValue(result);
+            jest.spyOn(service, 'update').mockResolvedValue(mockUser);
 
-            expect(await controller.update(userId, updateUserDto)).toBe(result);
+            expect(await controller.update(userId, updateUserDto)).toBe(mockUser);
         });
     });
 
     describe('remove', () => {
         it('should remove a user', async () => {
-            const expectedResult = { message: '`User with ID ${id} deleted`' };
+            const expectedResult = { message: `User with ID ${userId} deleted` };
 
             jest.spyOn(service, 'remove').mockResolvedValue(expectedResult);
 
@@ -99,13 +99,13 @@ describe('UsersController', () => {
 
     describe('upgradeRole', () => {
         it('should upgrade the role of a user', async () => {
-            jest.spyOn(service, 'upgradeRole').mockResolvedValue(result);
+            jest.spyOn(service, 'upgradeRole').mockResolvedValue(mockUser);
 
-            expect(await controller.upgradeRole(1, Role.ADMIN)).toBe(result);
+            expect(await controller.upgradeRole(1, Role.ADMIN)).toBe(mockUser);
         });
 
         it('should throw NotFoundException for invalid role', async () => {
-            jest.spyOn(service, 'upgradeRole').mockRejectedValue(new NotFoundException(`Role INVALID_ROLE not found`));
+            jest.spyOn(service, 'upgradeRole').mockRejectedValue(new NotFoundException('Role INVALID_ROLE not found'));
 
             await expect(controller.upgradeRole(1, 'INVALID_ROLE' as Role)).rejects.toThrow(NotFoundException);
             await expect(controller.upgradeRole(1, 'INVALID_ROLE' as Role)).rejects.toThrow('Role INVALID_ROLE not found');
