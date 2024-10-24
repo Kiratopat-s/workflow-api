@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Controller, Injectable, Logger } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { UsersService } from '../users/users.service';
 import { LoggedInDto } from './dto/logged-in.dto';
@@ -6,9 +6,10 @@ import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { v7 as uuidv7 } from 'uuid';
 
+@Controller('auth')
 @Injectable()
-export class AuthService {
-  private logger = new Logger(AuthService.name);
+export class AuthController {
+  private logger = new Logger(AuthController.name);
 
   constructor(
     private usersService: UsersService,
