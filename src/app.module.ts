@@ -8,6 +8,8 @@ import { AuthModule } from './auth/auth.module';
 import dbConfig from './db/db.config'
 import { LoginLoggerMiddleware } from './middlewares/login-logger.middleware';
 import { BudgetModule } from './budget/budget.module';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
 
 @Module({
   imports: [
@@ -16,7 +18,10 @@ import { BudgetModule } from './budget/budget.module';
     DbModule,
     UsersModule,
     AuthModule,
-    BudgetModule]
+    BudgetModule],
+  controllers: [AppController],
+  providers: [AppService],
+
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
