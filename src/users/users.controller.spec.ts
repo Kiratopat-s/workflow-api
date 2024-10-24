@@ -4,7 +4,7 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Role } from './entities/user.entity';
-import { BadRequestException } from '@nestjs/common';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
 
 describe('UsersController', () => {
     let controller: UsersController;
@@ -89,7 +89,7 @@ describe('UsersController', () => {
 
     describe('remove', () => {
         it('should remove a user', async () => {
-            const expectedResult = `User with ID ${userId} deleted`;
+            const expectedResult = { message: '`User with ID ${id} deleted`' };
 
             jest.spyOn(service, 'remove').mockResolvedValue(expectedResult);
 
@@ -104,9 +104,11 @@ describe('UsersController', () => {
             expect(await controller.upgradeRole(1, Role.ADMIN)).toBe(result);
         });
 
-        it('should throw BadRequestException for invalid role', async () => {
-            await expect(controller.upgradeRole(1, 'INVALID_ROLE' as Role)).rejects.toThrow(BadRequestException);
-            await expect(controller.upgradeRole(1, 'INVALID_ROLE' as Role)).rejects.toThrow('role ไม่ถูกต้อง');
+        it('should throw NotFoundException for invalid role', async () => {
+            jest.spyOn(service, 'upgradeRole').mockRejectedValue(new NotFoundException(`Role INVALID_ROLE not found`));
+
+            await expect(controller.upgradeRole(1, 'INVALID_ROLE' as Role)).rejects.toThrow(NotFoundException);
+            await expect(controller.upgradeRole(1, 'INVALID_ROLE' as Role)).rejects.toThrow('Role INVALID_ROLE not found');
         });
     });
 });
