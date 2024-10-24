@@ -38,9 +38,12 @@ export class UsersService {
   }
 
   async upgradeRole(id: number, role: Role) {
-    const result = this.userRepository.update(id, { role });
+    if (!Object.values(Role).includes(role)) {
+      throw new NotFoundException(`Role ${role} not found`);
+    }
+    const result = await this.userRepository.update(id, { role });
 
-    if ((await result).affected === 0) {
+    if (result.affected === 0) {
       throw new NotFoundException(`User with ID ${id} not found`);
     }
 
@@ -96,6 +99,6 @@ export class UsersService {
     if ((await result).affected === 0) {
       throw new NotFoundException(`User with ID ${id} not found`);
     }
-    return `User with ID ${id} deleted`;
+    return { message: `User with ID ${id} deleted` };
   }
 }

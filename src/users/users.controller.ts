@@ -22,9 +22,6 @@ export class UsersController {
     @Param('id', new ParseIntPipe({ exceptionFactory: (error: string) => new BadRequestException(`id ควรเป็น int`) })) id: number,
     @Param('role', new ParseEnumPipe(Role)) role: Role
   ) {
-    console.log('Reached upgradeRole method');
-    console.log('ID:', id);
-    console.log('Role:', role);
     return this.usersService.upgradeRole(id, role);
   }
 
