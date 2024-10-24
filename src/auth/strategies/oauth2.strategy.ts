@@ -27,8 +27,8 @@ export class Oauth2Strategy extends PassportStrategy(Strategy, 'oauth2') {
         accessToken: string,
         refreshToken: string
     ): Promise<LoggedInDto> {
-        console.log('accessToken', accessToken);
-        console.log('refreshToken', refreshToken);
+        // console.log('accessToken', accessToken);
+        // console.log('refreshToken', refreshToken);
         return this.authService.validateUserByAccessToken(accessToken);
     }
 }

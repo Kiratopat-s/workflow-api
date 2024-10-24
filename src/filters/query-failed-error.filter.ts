@@ -8,7 +8,7 @@ export class QueryFailedErrorFilter extends BaseExceptionFilter {
   catch(exception: QueryFailedError, host: ArgumentsHost) {
 
     const message: string = exception.message;
-    console.log(exception)
+    // console.log(exception)
 
     if (this.isDuplicateKeyValue(message)) {
       // return 409 Conflict

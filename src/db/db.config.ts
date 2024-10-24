@@ -3,12 +3,12 @@ import { registerAs } from "@nestjs/config";
 import { config as dotenvConfig } from 'dotenv';
 import { DataSource, DataSourceOptions } from "typeorm";
 
-console.log('before', `${process.env.DB_HOST}`)
+// console.log('before', `${process.env.DB_HOST}`)
 
 // load config
 dotenvConfig();
 
-console.log('after', `${process.env.DB_HOST}`)
+// console.log('after', `${process.env.DB_HOST}`)
 
 export const dbConfig = {
     type: 'postgres',
