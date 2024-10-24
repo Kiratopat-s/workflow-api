@@ -5,5 +5,8 @@ export class LoggedInDto {
     id: number;
     username: string
     role: Role;
+    description?: string;
+    items?: any[];
+    approvedItems?: any[];
     sub?: number;
 }
