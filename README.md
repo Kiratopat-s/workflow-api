@@ -6,12 +6,17 @@ Workflow API is a NestJS-based application designed to manage various workflows.
 
 ## Demo
 
-You can access a live demo of the Workflow API [here](https://api.kirato.online).
+You can access a live demo of the Workflow API 👉 [here](https://api.kirato.online).
+
+## Postman Collection
+
+You can download the Postman collection for the Workflow API 👉 [here](https://blue-satellite-703896.postman.co/workspace/59384a9a-66ae-4132-96c6-6267fdafec82/documentation/17772821-21f50593-6094-46bf-9076-a38e6a6db3cb).
 
 ## Table of Contents
 
 - [Overview](#overview)
 - [Demo](#demo)
+- [Postman Collection](#postman-collection)
 - [Features](#features)
 - [Technologies](#technologies)
 - [Installation](#installation)
@@ -141,7 +146,5 @@ GITHUB_TOKEN=
 - **Running the Application**: Commands to run the application in different modes.
 - **API Endpoints**: Lists the available API endpoints with brief descriptions.
 - **Testing**: Commands to run unit tests, end-to-end tests, and check test coverage.
-- **Contributing**: Guidelines for contributing to the project.
-- **License**: Information about the project's license.
 
 This [README.md](http://_vscodecontentref_/#%7B%22uri%22%3A%7B%22%24mid%22%3A1%2C%22fsPath%22%3A%22%2FUsers%2Fkiratipatsawangsisombat%2FDesktop%2Fdevpool%2Fworkflow-api%2FREADME.md%22%2C%22path%22%3A%22%2FUsers%2Fkiratipatsawangsisombat%2FDesktop%2Fdevpool%2Fworkflow-api%2FREADME.md%22%2C%22scheme%22%3A%22file%22%7D%7D) provides a comprehensive guide for developers to understand, set up, and contribute to the project.
