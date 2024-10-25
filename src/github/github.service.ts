@@ -39,7 +39,7 @@ export class GithubService {
     const totalCommits = responses.map(response => {
       this.logger.debug(`Response data for repo: ${JSON.stringify(response.data)}`);
       if (Array.isArray(response.data)) {
-        return response.data.reduce((acc, curr) => acc + curr.total, 0);
+        return response.data.reduce((acc: number, curr: WeekCommitInfo) => acc + curr.total, 0);
       } else {
         this.logger.error(`Unexpected response data format: ${JSON.stringify(response.data)}`);
         throw new Error('Unexpected response data format');
